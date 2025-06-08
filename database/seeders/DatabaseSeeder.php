@@ -15,15 +15,15 @@ class DatabaseSeeder extends Seeder
 
         // Crear usuarios y asignar roles
         $superAdmin = User::create([
-            'name' => 'Oscar Ibarra',
-            'email' => 'oscaribarra@gmail.com',
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('1234'),
         ]);
         $superAdmin->assignRole('superAdmin');
 
         $empleado = User::create([
-            'name' => 'Salome',
-            'email' => 'salome@gmai.com',
+            'name' => 'Empleado',
+            'email' => 'empleado@gmail.com',
             'password' => Hash::make('1234'),
         ]);
         $empleado->assignRole('superAdmin');

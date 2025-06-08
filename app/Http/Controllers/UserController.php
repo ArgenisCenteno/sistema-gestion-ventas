@@ -313,18 +313,10 @@ class UserController extends Controller
     
         // Verificar si la caja está abierta
         $apertura = AperturaCaja::where('caja_id', $caja->id)->where('estatus', 'Operando')->first();
-    
-        if (!$apertura) {
+     
             // Si la caja no está abierta, redirigimos al logout
             Auth::logout();  // Cerrar sesión directamente
             return redirect()->route('login');  // Redirigir a la página de login
-        } else {
-            // Si la caja está abierta, mostramos una alerta
-            Alert::info('No ha cerrado caja', 'Debe cerrar la caja antes de cerrar la sesión')
-                ->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-    
-            // Redirigimos a la página de inicio
-            return redirect()->route('home');
-        }
+        
     }
 }

@@ -126,11 +126,7 @@ class HomeController extends Controller
             $caja = Caja::find(1);
             $apertura = AperturaCaja::where('caja_id', $caja->id)->where('estatus', 'Operando')->first();
             
-            if (!$apertura) {
-                Alert::info('La caja esta cerrada', 'Para comenzar a trabajar debe abrir la caja')
-                ->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-    
-            }
+            
             return view('home', data: compact('comprasMonto','ventasMonto','pagosMonto','recibos','meses1', 'ventasData', 'comprasData', 'ventas', 'dolar', 'compras', 'notificaciones', 'proveedores', 'usuarios', 'productos', 'categorias', 'subcategorias', 'pagos'));
         } else {
             $ventas = Venta::where('user_id', Auth::user()->id)->count();

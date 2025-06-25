@@ -1,164 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura</title>
+    <title>Recibo de Venta</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
             margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-            border: none;
-            background-color: #f9f9f9;
+            
+            width: 240px; /* Ancho típico para recibo térmico */
         }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 8px;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
+
+        .center {
             text-align: center;
         }
+
+        .bold {
+            font-weight: bold;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 5px;
         }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
+
+        td, th {
+            padding: 2px 0;
             text-align: left;
         }
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+
+        .totales td {
+            text-align: right;
         }
-        .footer div {
-            width: 48%;
+
+        .line {
+            border-top: 1px dashed #000;
+            margin: 5px 0;
         }
-        .signature {
+
+        .qr {
+            margin-top: 10px;
             text-align: center;
-            padding-top: 10px;
-            border-top: 1px solid #000;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>RECIBO DE VENTA</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" style="font-size: 22px; font-weight: bold;">SISTEMA</th>
-                    <th style="font-size: 16px; text-align: center;">
-                        <strong>RECIBO NRO: {{$venta->id}}</strong>
-                    </th>
-                </tr>
-                <tr>
-                    <th style="font-size: 16px;">Fecha de Emisión:</th>
-                    <td style="font-size: 16px;">{{$fechaVenta}}</td>
-                    <th style="font-size: 16px; text-align: center;"> </th>
-                </tr>
-            </thead>
-        </table>
-
-        <!-- Datos del Cliente -->
-        <table>
-            <thead>
-                <tr>
-                    <th>CLIENTE</th>
-                    <th>VENDEDOR</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{$userArray['name']}}</td>
-                    <td>{{$vendedorArray['name']}}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Conceptos de los productos -->
-        <table>
-            <thead>
-                <tr>
-                    <th>DESCRIPCIÓN</th>
-                    <th>CANTIDAD</th>
-                    <th>PRECIO UNITARIO</th>
-                    <th>TOTAL</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($venta->detalleVentas as $detalle)
-                    <tr>
-                        <td>{{$detalle->producto->nombre}}</td>
-                        <td>{{$detalle->cantidad}}</td>
-                        <td>{{number_format($detalle->precio_producto, 2)}}</td>
-                        <td>{{number_format($detalle->impuesto + $detalle->neto, 2)}}</td>
-                    </tr>
-                @endforeach
-                <tr>
-                    <td colspan="3" style="font-weight: bold; text-align: right;">TOTAL</td>
-                    <td><strong>{{number_format($venta->pago->monto_total, 2)}}</strong></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Métodos de pago -->
-        <table>
-            <thead>
-                <tr>
-                    <th>METODO DE PAGO</th>
-                    <th>MONTO</th>
-                    <th>DIVISA</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $totalBolivares = 0;
-                    $totalDivisa = 0;
-                @endphp
-                @foreach (json_decode($venta->pago->forma_pago) as $pago)
-                    @if($pago->monto > 0 )
-                        <tr>
-                            <td>{{ $pago->metodo }}</td>
-                            <td>
-                                {{ $pago->metodo == 'Divisa' ? number_format(0, 2) : number_format($pago->monto, 2) }}
-                            </td>
-                            <td>
-                                {{ $pago->metodo != 'Divisa' ? number_format(0, 2) : number_format($pago->monto, 2) }}
-                            </td>
-                        </tr>
-                        @php
-                            if ($pago->metodo != 'Divisa') {
-                                $totalBolivares += $pago->monto;
-                            } else {
-                                $totalDivisa += $pago->monto;
-                            }
-                        @endphp
-                    @endif
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td style="font-weight: bold;">Totales</td>
-                    <td style="font-weight: bold;">{{ number_format($totalBolivares, 2) }}</td>
-                    <td style="font-weight: bold;">{{ number_format($totalDivisa, 2) }}</td>
-                </tr>
-            </tfoot>
-        </table>
-
-        
-
+    <div class="center">
+        <div class="bold">COMERCIAL YASMELIS RONDÓN</div>
+        <div>RIF: V-09281465-0</div>
+        <div>Tel: 0412-0000000</div>
     </div>
-</body>
 
+    <div class="line"></div>
+
+    <table>
+        <tr>
+            <td class="bold">Recibo N°:</td>
+            <td>{{ $venta->id }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Fecha:</td>
+            <td>{{ $fechaVenta }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Cliente:</td>
+            <td>{{ $userArray['name'] }}</td>
+        </tr>
+        <tr>
+            <td class="bold">Vendedor:</td>
+            <td>{{ $vendedorArray['name'] }}</td>
+        </tr>
+    </table>
+
+    <div class="line"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cant</th>
+                <th>Precio</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($venta->detalleVentas as $detalle)
+                <tr>
+                    <td>{{ Str::limit($detalle->producto->nombre, 10) }}</td>
+                    <td>{{ $detalle->cantidad }}</td>
+                    <td>{{ number_format($detalle->precio_producto, 2) }}</td>
+                    <td>{{ number_format($detalle->neto + $detalle->impuesto, 2) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="line"></div>
+
+    <table class="totales">
+        <tr>
+            <td class="bold">TOTAL:</td>
+            <td class="bold">{{ number_format($venta->pago->monto_total, 2) }} Bs</td>
+        </tr>
+    </table>
+
+    <div class="line"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Bs</th>
+                <th>Div</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $totalBs = 0;
+                $totalDiv = 0;
+            @endphp
+            @foreach (json_decode($venta->pago->forma_pago) as $pago)
+                @if ($pago->monto > 0)
+                    <tr>
+                        <td>{{ $pago->metodo }}</td>
+                        <td>
+                            {{ $pago->metodo == 'Divisa' ? '0,00' : number_format($pago->monto, 2) }}
+                        </td>
+                        <td>
+                            {{ $pago->metodo == 'Divisa' ? number_format($pago->monto, 2) : '0,00' }}
+                        </td>
+                    </tr>
+                    @php
+                        if ($pago->metodo == 'Divisa') {
+                            $totalDiv += $pago->monto;
+                        } else {
+                            $totalBs += $pago->monto;
+                        }
+                    @endphp
+                @endif
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="line"></div>
+
+    <div class="center">
+        <div class="bold">¡Gracias por su compra!</div>
+        <div>Este documento no es válido como factura fiscal.</div>
+    </div>
+
+    @if(isset($qrCode))
+        <div class="qr">
+            {!! $qrCode !!}
+            <small>Escanea para verificar</small>
+        </div>
+    @endif
+</body>
 </html>

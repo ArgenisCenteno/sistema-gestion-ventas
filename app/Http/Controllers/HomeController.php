@@ -124,7 +124,10 @@ class HomeController extends Controller
             }
 
             $caja = Caja::find(1);
+            if($caja){
             $apertura = AperturaCaja::where('caja_id', $caja->id)->where('estatus', 'Operando')->first();
+
+            }
             
             
             return view('home', data: compact('comprasMonto','ventasMonto','pagosMonto','recibos','meses1', 'ventasData', 'comprasData', 'ventas', 'dolar', 'compras', 'notificaciones', 'proveedores', 'usuarios', 'productos', 'categorias', 'subcategorias', 'pagos'));

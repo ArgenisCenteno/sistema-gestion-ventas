@@ -32,6 +32,7 @@ class PdfController extends Controller
 
        // dd($vendedorArray);
         $pdf = \App::make('dompdf.wrapper');
+        $pdf->setPaper([0, 0, 226.77, 600], 'portrait');
         $pdf->loadView('ventas.pdf', compact('venta', 'formaPagoArray', 'qrCode', 'vendedorArray', 'userArray', 'fechaVenta'));
         return $pdf->stream('venta.pdf');
     }

@@ -6,8 +6,10 @@ use App\Models\Compra;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;  
 
-class ComprasExport implements FromView, ShouldAutoSize
+class ComprasExport implements FromView, ShouldAutoSize, WithStyles
 {
     protected $startDate;
     protected $endDate;
@@ -25,5 +27,18 @@ class ComprasExport implements FromView, ShouldAutoSize
             ->get();
 
         return view('exports.compras', compact('compras'));
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            1 => [
+                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => '007BFF'],
+                ],
+            ],
+        ];
     }
 }

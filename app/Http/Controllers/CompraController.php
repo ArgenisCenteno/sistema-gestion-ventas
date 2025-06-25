@@ -302,7 +302,7 @@ class CompraController extends Controller
 
 
         Alert::success('¡Exito!', 'Compra generada exitosamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-        return redirect()->route('compras.show', $Compra->id);
+        return redirect()->back();
     }
 
     public function destroy($id)
